@@ -63,3 +63,6 @@ fastlane/test_output
 
 # Built app bundle
 dist/
+
+# Xcode workspace generated when opening the package
+.swiftpm/

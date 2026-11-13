@@ -3,7 +3,8 @@ import SwiftUI
 /// The panel shown when the menu bar icon is clicked.
 struct MenuView: View {
     @Environment(AppModel.self) private var model
-    @Environment(\.openWindow) private var openWindow
+    /// Called when the user asks for the Settings window.
+    var onOpenSettings: () -> Void = {}
     @AppStorage("customAmount") private var customAmount = 10
     @AppStorage("customUnit") private var customUnit = DurationUnit.minutes
     @State private var showsCustomDuration = false
@@ -26,10 +27,12 @@ struct MenuView: View {
             switch model.status {
             case .enabled, .disabled:
                 separator
-                VStack(alignment: .leading, spacing: 16) {
-                    pauseSection
-                    statusSection
-                    if let summary = model.summary { statsSection(summary) }
+                GlassGroup {
+                    VStack(alignment: .leading, spacing: 16) {
+                        pauseSection
+                        statusSection
+                        if let summary = model.summary { statsSection(summary) }
+                    }
                 }
                 .padding(Self.inset)
             case .notConfigured:
@@ -58,7 +61,7 @@ struct MenuView: View {
                 Button(action: openSettings) { MenuRowLabel(title: "Settings…", shortcut: "⌘,") }
                     .keyboardShortcut(",", modifiers: .command)
                 Button { Task { await model.quit() } } label: {
-                    MenuRowLabel(title: "Quit Pi-hole Switcher", shortcut: "⌘Q")
+                    MenuRowLabel(title: "Quit Loophole", shortcut: "⌘Q")
                 }
                 .keyboardShortcut("q", modifiers: .command)
             }
@@ -82,7 +85,7 @@ struct MenuView: View {
 
     private var header: some View {
         HStack(spacing: 12) {
-            StatusBadge(symbol: model.menuBarSymbol, tint: tint)
+            StatusBadge(status: model.status, tint: tint)
             VStack(alignment: .leading, spacing: 1) {
                 Text("Pi-hole")
                     .font(.headline)
@@ -186,7 +189,7 @@ struct MenuView: View {
                     .fixedSize()
                     Spacer()
                     Button("Pause", action: pauseForCustomDuration)
-                        .buttonStyle(.borderedProminent)
+                        .glassButtonStyle(prominent: true)
                         .disabled(!customUnit.range.contains(customAmount))
                 }
                 .transition(.opacity.combined(with: .move(edge: .top)))
@@ -228,7 +231,7 @@ struct MenuView: View {
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Card())
+            .glassSurface(in: .rect(cornerRadius: 12, style: .continuous), fallback: .quaternary.opacity(0.6))
         }
     }
 
@@ -285,9 +288,9 @@ struct MenuView: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             if prominent {
-                Button(action, action: perform).buttonStyle(.borderedProminent)
+                Button(action, action: perform).glassButtonStyle(prominent: true)
             } else {
-                Button(action, action: perform)
+                Button(action, action: perform).glassButtonStyle()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -303,8 +306,7 @@ struct MenuView: View {
     }
 
     private func openSettings() {
-        openWindow(id: "settings")
-        NSApp.activate(ignoringOtherApps: true)
+        onOpenSettings()
     }
 }
 
@@ -330,18 +332,23 @@ private enum DurationUnit: String, CaseIterable {
 /// The round state indicator in the header, in the style of Control Center's toggles:
 /// filled with colour when there is something to say, neutral otherwise.
 private struct StatusBadge: View {
-    let symbol: String
+    let status: AppModel.Status
     let tint: Color?
 
     var body: some View {
-        ZStack {
-            Circle().fill(tint.map { AnyShapeStyle($0.gradient) } ?? AnyShapeStyle(.quaternary))
-            Image(systemName: symbol)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(tint == nil ? AnyShapeStyle(.secondary) : AnyShapeStyle(.white))
-        }
-        .frame(width: 36, height: 36)
-        .accessibilityHidden(true)
+        // The same two-tone shield as the menu bar item: whole when blocking, punched when not.
+        Image(nsImage: MenuBarIcon.image(for: status, dimsWhenUnavailable: false))
+            .renderingMode(.template)
+            .resizable()
+            .scaledToFit()
+            .frame(height: 19)
+            .foregroundStyle(tint == nil ? AnyShapeStyle(.secondary) : AnyShapeStyle(.white))
+            .frame(width: 36, height: 36)
+            .glassSurface(
+                in: .circle, tint: tint,
+                fallback: tint.map { AnyShapeStyle($0.gradient) } ?? AnyShapeStyle(.quaternary)
+            )
+            .accessibilityHidden(true)
     }
 }
 
@@ -357,13 +364,6 @@ private struct SectionHeader: View {
             .font(.subheadline.weight(.semibold))
             .foregroundStyle(.secondary)
             .accessibilityAddTraits(.isHeader)
-    }
-}
-
-private struct Card: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: 9, style: .continuous)
-            .fill(.quaternary.opacity(0.6))
     }
 }
 
@@ -412,16 +412,14 @@ private struct StatTile: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
-        .background {
-            ZStack(alignment: .trailing) {
-                color
-                Image(systemName: symbol)
-                    .font(.system(size: 40))
-                    .foregroundStyle(.black.opacity(0.16))
-                    .offset(x: 8, y: 4)
-            }
+        .background(alignment: .trailing) {
+            Image(systemName: symbol)
+                .font(.system(size: 40))
+                .foregroundStyle(.black.opacity(0.16))
+                .offset(x: 8, y: 4)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+        .clipShape(.rect(cornerRadius: 12, style: .continuous))
+        .glassSurface(in: .rect(cornerRadius: 12, style: .continuous), tint: color, fallback: color)
         .accessibilityElement(children: .combine)
     }
 }
@@ -448,10 +446,12 @@ private struct PillButtonStyle: ButtonStyle {
                 .foregroundStyle(isSelected ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 6)
-                .background {
-                    RoundedRectangle(cornerRadius: 7, style: .continuous)
-                        .fill(isSelected ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary.opacity(fillOpacity)))
-                }
+                .glassSurface(
+                    in: .rect(cornerRadius: 9, style: .continuous),
+                    tint: isSelected ? .accentColor : nil,
+                    interactive: true,
+                    fallback: isSelected ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary.opacity(fillOpacity))
+                )
                 .opacity(isEnabled ? 1 : 0.5)
                 .contentShape(Rectangle())
                 .onHover { isHovered = $0 }

@@ -64,15 +64,6 @@ final class AppModel {
         PiholeClient.normalizedBaseURL(from: address)?.appending(path: "admin/")
     }
 
-    var menuBarSymbol: String {
-        switch status {
-        case .enabled: "shield.lefthalf.filled"
-        case .disabled: "shield.slash"
-        case .notConfigured, .unknown: "shield"
-        case .failed: "exclamationmark.shield"
-        }
-    }
-
     // MARK: - Actions
 
     func refresh() async {
@@ -245,6 +236,9 @@ extension AppModel {
         model.status = status
         model.summary = summary
         model.system = system
+        if case .disabled(let until?) = status {
+            model.countdownText = countdown(until.timeIntervalSinceNow)
+        }
         return model
     }
 }

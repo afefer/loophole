@@ -2,17 +2,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "PiholeSwitcher",
+    name: "Loophole",
     platforms: [.macOS(.v15)],
     targets: [
         .executableTarget(
-            name: "PiholeSwitcher",
-            path: "Sources/PiholeSwitcher"
+            name: "Loophole",
+            path: "Sources/Loophole"
         ),
         .testTarget(
-            name: "PiholeSwitcherTests",
-            dependencies: ["PiholeSwitcher"],
-            path: "Tests/PiholeSwitcherTests"
+            name: "LoopholeTests",
+            dependencies: ["Loophole"],
+            path: "Tests/LoopholeTests"
         ),
     ]
 )

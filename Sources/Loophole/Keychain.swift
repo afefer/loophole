@@ -3,7 +3,7 @@ import Security
 
 /// Stores the Pi-hole password as a generic password in the login keychain.
 enum Keychain {
-    private static let service = "com.piholeswitcher.app"
+    private static let service = "io.github.afefer.loophole"
     private static let account = "pihole-password"
 
     private static var baseQuery: [String: Any] {

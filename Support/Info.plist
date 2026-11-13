@@ -5,23 +5,25 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
-	<string>PiholeSwitcher</string>
+	<string>Loophole</string>
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.piholeswitcher.app</string>
+	<string>io.github.afefer.loophole</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Pi-hole Switcher</string>
+	<string>Loophole</string>
 	<key>CFBundleDisplayName</key>
-	<string>Pi-hole Switcher</string>
+	<string>Loophole</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>15.0</string>
 	<!-- Menu bar only: no Dock icon, no app menu. -->
@@ -34,6 +36,6 @@
 		<true/>
 	</dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Pi-hole Switcher talks to the Pi-hole on your network to turn blocking on and off.</string>
+	<string>Loophole talks to the Pi-hole on your network to turn blocking on and off.</string>
 </dict>
 </plist>

@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@testable import PiholeSwitcher
+@testable import Loophole
 
 /// Answers requests from a scripted fake Pi-hole and records what was asked.
 final class StubProtocol: URLProtocol, @unchecked Sendable {

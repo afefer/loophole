@@ -28,7 +28,7 @@ swift run Loophole --demo --paused            # same, mid-pause (countdown in th
 swift run Loophole --snapshot <dir>           # PNGs of every state, for design review and the README
 swift run Loophole --demo --capture-popover <dir>   # open the real panel and capture it
 swift scripts/make-icon.swift                 # regenerate Support/AppIcon.icns
-./scripts/release.sh                          # signed, notarized dist/Loophole-<version>.dmg
+./scripts/release.sh                          # signed, notarized dist/Loophole.dmg
 ```
 
 The `--demo`, `--snapshot` and `--capture-popover` flags exist only in debug builds (`#if DEBUG` in `Snapshot.swift`).
@@ -124,6 +124,8 @@ After a UI change, look at the snapshots before reporting it done.
 
 - a "Developer ID Application" certificate in the keychain (auto-detected, or set `SIGN_IDENTITY`);
 - notary credentials: a keychain profile named `loophole-notary` (`xcrun notarytool store-credentials`, run in a real terminal because it prompts), or `NOTARY_KEY` / `NOTARY_KEY_ID` / `NOTARY_ISSUER` for an App Store Connect API key.
+
+The image is always named `Loophole.dmg`, so the README's download button can link to `releases/latest/download/Loophole.dmg`.
 
 `--skip-notarize` exercises the packaging without contacting Apple. `VERSION` overrides the version in `Info.plist`.
 

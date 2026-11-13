@@ -11,6 +11,14 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/afefer/loophole/releases/latest/download/Loophole.dmg">
+    <img src="docs/download-button.svg" width="280" height="60" alt="Download for macOS">
+  </a>
+  <br>
+  <sub>Free · macOS 15 or later · Apple silicon and Intel · requires Pi-hole v6</sub>
+</p>
+
+<p align="center">
   <img src="docs/popover-light.png" width="340" alt="The Loophole panel with blocking on, in light mode">
   <img src="docs/popover-dark.png" width="340" alt="The Loophole panel during a timed pause, in dark mode">
 </p>
@@ -32,7 +40,7 @@
 
 ## Install
 
-1. Download **Loophole.dmg** from the [latest release](https://github.com/afefer/loophole/releases/latest).
+1. Download [**Loophole.dmg**](https://github.com/afefer/loophole/releases/latest/download/Loophole.dmg) (or pick a version from the [releases page](https://github.com/afefer/loophole/releases)).
 2. Open it and drag **Loophole** to your Applications folder.
 3. Launch Loophole. It appears in the menu bar, and opens Settings the first time.
 
@@ -85,7 +93,7 @@ The snapshot mode shows each panel on screen briefly and captures it, using samp
 
 ## Releasing
 
-`scripts/release.sh` builds the downloadable version: a universal (Apple silicon and Intel) app, signed with a Developer ID certificate, notarized by Apple, and packaged as `dist/Loophole-<version>.dmg`. It needs a "Developer ID Application" certificate in your keychain and notary credentials stored once with `xcrun notarytool store-credentials loophole-notary`.
+`scripts/release.sh` builds the downloadable version: a universal (Apple silicon and Intel) app, signed with a Developer ID certificate, notarized by Apple, and packaged as `dist/Loophole.dmg`. It needs a "Developer ID Application" certificate in your keychain and notary credentials stored once with `xcrun notarytool store-credentials loophole-notary`.
 
 Pushing a version tag does the same on GitHub and publishes the disk image as a release:
 

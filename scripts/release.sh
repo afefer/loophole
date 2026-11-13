@@ -1,6 +1,7 @@
 #!/bin/bash
 # Builds the downloadable release: a universal, Developer ID-signed, notarized
-# "dist/Loophole-<version>.dmg" that opens on any Mac without Gatekeeper warnings.
+# "dist/Loophole.dmg" that opens on any Mac without Gatekeeper warnings. The file name carries no
+# version so that releases/latest/download/Loophole.dmg is always the newest one.
 #
 #   --skip-notarize   package without notarizing (to try the packaging; not for distribution)
 #
@@ -21,7 +22,7 @@ NOTARIZE=1
 
 VERSION="${VERSION:-$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' Support/Info.plist)}"
 APP="dist/Loophole.app"
-DMG="dist/Loophole-$VERSION.dmg"
+DMG="dist/Loophole.dmg"
 
 if [[ -z "${SIGN_IDENTITY:-}" ]]; then
     SIGN_IDENTITY="$(security find-identity -v -p codesigning | awk -F'"' '/Developer ID Application/ { print $2; exit }')"

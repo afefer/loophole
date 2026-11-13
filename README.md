@@ -6,7 +6,7 @@
 
 <p align="center">
   A menu bar switch for Pi-hole.<br>
-  Open a loophole in your ad blocking for a few minutes, see how it's doing, and get back to work.
+  Open a hole in your Pi-hole's ad blocking for a few minutes, see how it's doing, and get back to work. Fully open-source and released under the MIT license. Contributions welcome.
 </p>
 
 <p align="center">
@@ -68,7 +68,7 @@ Tips:
 
 ## In the menu bar
 
-The shield is solid while blocking is on and has a hole through it — the loophole — while blocking is off or paused. It is dimmed when the Pi-hole can't be reached. During a timed pause, the time remaining appears next to it.
+The shield is solid while blocking is on and has a hole through it while blocking is off or paused. It is dimmed when the Pi-hole can't be reached. During a timed pause, the time remaining appears next to it.
 
 ## Development
 

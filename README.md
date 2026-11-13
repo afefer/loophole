@@ -6,7 +6,8 @@
 
 <p align="center">
   A menu bar switch for Pi-hole.<br>
-  Open a hole in your Pi-hole's ad blocking for a few minutes, see how it's doing, and get back to work. Fully open-source and released under the MIT license. Contributions welcome.
+  Open a hole in your Pi-hole's ad blocking for a few minutes, see how it's doing, and get back to work. 
+  Fully open-source and released under the MIT license. Contributions welcome.
 </p>
 
 <p align="center">
